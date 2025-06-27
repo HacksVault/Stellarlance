@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from typing import List
 import uvicorn
+import os
 
 groq_client = AsyncOpenAI(
     api_key="***REMOVED***",  
