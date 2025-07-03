@@ -9,7 +9,7 @@ import requests
 import os
 
 groq_client = AsyncOpenAI(
-    api_key="***REMOVED***",  
+    api_key="YOUR_API_KEY",  
     base_url="https://api.groq.com/openai/v1"  
 )
 
