@@ -125,9 +125,10 @@ function ChatWindow({ user, peer, chat, onSend }: ChatWindowProps) {
           
           return (
             <div key={i} className={`mb-2 flex ${isFromUser ? "justify-end" : "justify-start"}`}>
-              <div className={`px-4 py-2 rounded-lg max-w-[70%] ${
-                isFromUser ? "bg-cyan-700 text-white" : "bg-gray-700 text-white"
-              }`}>
+              <div
+                className={`px-4 py-2 rounded-lg max-w-[70%] ${isFromUser ? "bg-cyan-700 text-white" : "bg-gray-700 text-white"} break-all`}
+                style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}
+              >
                 {autoLinkExplorer(msg.text)}
               </div>
             </div>

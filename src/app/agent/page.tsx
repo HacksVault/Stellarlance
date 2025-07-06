@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { FaPaperclip, FaArrowUp, FaStar } from "react-icons/fa";
-import { freelancers as allFreelancers, Freelancer } from "../freelancers/data";
+import { freelancers as allFreelancers } from "../freelancers/data";
 import Navbar from "../components/Navbar";
 import { useAccount } from "wagmi";
 import ClientProviders from "../components/ClientProviders";
@@ -9,7 +9,7 @@ import ClientProviders from "../components/ClientProviders";
 interface ChatMessage {
   role: "user" | "agent" | "cards";
   content?: string;
-  freelancers?: Freelancer[];
+  freelancers?: any[];
 }
 
 export default function Agent() {
@@ -18,12 +18,12 @@ export default function Agent() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [scoutedFreelancers, setScoutedFreelancers] = useState<Freelancer[]>([]);
-  const [selectedFreelancer, setSelectedFreelancer] = useState<Freelancer | null>(null);
+  const [scoutedFreelancers, setScoutedFreelancers] = useState<any[]>([]);
+  const [selectedFreelancer, setSelectedFreelancer] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [privateChats, setPrivateChats] = useState<{ [username: string]: {from: string, text: string}[] }>({});
   const [privateChatOpen, setPrivateChatOpen] = useState(false);
-  const [privateChatFreelancer, setPrivateChatFreelancer] = useState<Freelancer | null>(null);
+  const [privateChatFreelancer, setPrivateChatFreelancer] = useState<any | null>(null);
   const privateInputRef = useRef<HTMLInputElement>(null);
   const [privateInput, setPrivateInput] = useState("");
   const [pendingProposal, setPendingProposal] = useState<{ details: string, freelancerName: string, freelancerWallet?: string } | null>(null);
@@ -195,7 +195,7 @@ export default function Agent() {
   };
 
   // Generate a fun fact for a freelancer
-  function getFunFact(f: Freelancer) {
+  function getFunFact(f: any) {
     // Simple fun fact logic: pick a highlight from their description or stats
     if (f.projects >= 25) return `Has completed over ${f.projects} projects!`;
     if (f.stars >= 4.9) return `Rated among the top with ${f.stars} stars!`;
@@ -207,12 +207,12 @@ export default function Agent() {
     return f.desc.split(".")[0] + ".";
   }
 
-  function handleUsernameClick(freelancer: Freelancer) {
+  function handleUsernameClick(freelancer: any) {
     setSelectedFreelancer(freelancer);
     setShowModal(true);
   }
 
-  function openPrivateChat(freelancer: Freelancer, forceProposal = false) {
+  function openPrivateChat(freelancer: any, forceProposal = false) {
     setPrivateChatFreelancer(freelancer);
     setPrivateChatOpen(true);
     setPrivateChats(prev => {
@@ -229,7 +229,7 @@ export default function Agent() {
     setShowModal(false);
   }
 
-  function handleMessageClick(freelancer: Freelancer) {
+  function handleMessageClick(freelancer: any) {
     openPrivateChat(freelancer);
   }
 
@@ -375,21 +375,20 @@ export default function Agent() {
                       ))}
                     </div>
                   );
+                } else if (msg.role === "agent" || msg.role === "user") {
+                  const isUser = msg.role === "user";
+                  return (
+                    <div key={i} className={`mb-4 flex ${isUser ? "justify-end" : "justify-start"}`}>
+                      <div
+                        className={`rounded-xl px-4 py-3 max-w-[80%] ${isUser ? "bg-cyan-600 text-white" : "bg-gray-400 text-gray-900"} break-all`}
+                        style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}
+                      >
+                        {msg.content}
+                      </div>
+                    </div>
+                  );
                 }
-                return (
-                  <div
-                    key={i}
-                    className={`w-fit max-w-[90%] px-4 py-2 rounded-lg text-white ${
-                      msg.role === "user"
-                        ? "bg-cyan-700 self-end"
-                        : "bg-gray-700 self-start"
-                    }`}
-                  >
-                    {msg.content?.split("\n").map((line, idx) => (
-                      <div key={idx}>{line}</div>
-                    ))}
-                  </div>
-                );
+                return null;
               })}
               {loading && (
                 <div className="w-fit max-w-[90%] px-4 py-2 rounded-lg bg-gray-700 text-white self-start opacity-70">

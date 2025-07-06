@@ -15,36 +15,30 @@ interface CardProps {
 
 const Card = ({ name, role, desc, projects, stars, perfection }: CardProps) => {
   return (
-    <StyledWrapper>
-      <div className="parent">
-        <div className="card">
-          <div className="logo">
-            <span className="circle circle1" />
-            <span className="circle circle2" />
-            <span className="circle circle3" />
-            <span className="circle circle4" />
-            <span className="circle circle5">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.667 31.69" className="svg">
-                <path id="Path_6" data-name="Path 6" d="M12.827,1.628A1.561,1.561,0,0,1,14.31,0h2.964a1.561,1.561,0,0,1,1.483,1.628v11.9a9.252,9.252,0,0,1-2.432,6.852q-2.432,2.409-6.963,2.409T2.4,20.452Q0,18.094,0,13.669V1.628A1.561,1.561,0,0,1,1.483,0h2.98A1.561,1.561,0,0,1,5.947,1.628V13.191a5.635,5.635,0,0,0,.85,3.451,3.153,3.153,0,0,0,2.632,1.094,3.032,3.032,0,0,0,2.582-1.076,5.836,5.836,0,0,0,.816-3.486Z" transform="translate(0 0)" />
-                <path id="Path_7" data-name="Path 7" d="M75.207,20.857a1.561,1.561,0,0,1-1.483,1.628h-2.98a1.561,1.561,0,0,1-1.483-1.628V1.628A1.561,1.561,0,0,1,70.743,0h2.98a1.561,1.561,0,0,1,1.483,1.628Z" transform="translate(-45.91 0)" />
-                <path id="Path_8" data-name="Path 8" d="M0,80.018A1.561,1.561,0,0,1,1.483,78.39h26.7a1.561,1.561,0,0,1,1.483,1.628v2.006a1.561,1.561,0,0,1-1.483,1.628H1.483A1.561,1.561,0,0,1,0,82.025Z" transform="translate(0 -51.963)" />
-              </svg>
-            </span>
-          </div>
-          <div className="glass" />
-          <div className="content">
-            <span className="title">{name}</span>
-            <span className="text">{desc}</span>
-          </div>
-          <div className="card-meta">
-            <div><strong>Role:</strong> {role}</div>
-            <div><strong>Projects:</strong> {projects}</div>
-            <div><strong>Stars:</strong> {stars}</div>
-            <div><strong>Perfection:</strong> {perfection}%</div>
-          </div>
-        </div>
+    <div style={{
+      background: '#fff',
+      borderRadius: '16px',
+      boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
+      padding: '2rem 1.5rem',
+      margin: '0.5rem',
+      minWidth: 260,
+      maxWidth: 320,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      height: 320,
+    }}>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: 22, color: '#222', marginBottom: 8 }}>{name}</div>
+        <div style={{ color: '#555', fontSize: 15, marginBottom: 16 }}>{desc}</div>
       </div>
-    </StyledWrapper>
+      <div style={{ fontSize: 14, color: '#333', marginTop: 12 }}>
+        <div><strong>Role:</strong> {role}</div>
+        <div><strong>Projects:</strong> {projects}</div>
+        <div><strong>Stars:</strong> {stars}</div>
+        <div><strong>Perfection:</strong> {perfection}%</div>
+      </div>
+    </div>
   );
 };
 

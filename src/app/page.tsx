@@ -238,15 +238,12 @@ function GatedHome() {
       <div className="min-h-screen bg-transparent flex flex-col items-start justify-center px-4 ml-40">
         <h1 className="text-5xl md:text-6xl font-extrabold text-left mb-8 text-white">
           <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
-            CryptoLance
+            StellarLance
           </span>
         </h1>
         <p className="text-xl font-semibold mb-8 text-left" style={{ color: '#ff4fcf' }}>
-          Find and hire the top freelancers on chain
+          Fully Autonomous Freelancers Hiring Platform
         </p>
-        <ShadowButtonWrapper>
-          <button className="mb-8 ml-40">Login</button>
-        </ShadowButtonWrapper>
         <StyledConnectWrapper>
           <div className="connect-btn-row gap-8">
             <div className="button-with-arrow">
