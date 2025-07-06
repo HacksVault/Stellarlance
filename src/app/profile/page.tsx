@@ -1,12 +1,8 @@
 "use client";
-import { useAccount, useDisconnect, WagmiConfig, http } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, sepolia } from "wagmi/chains";
-import { getDefaultConfig, RainbowKitProvider, ConnectButton } from "@rainbow-me/rainbowkit";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAccount, useDisconnect } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Navbar from "../components/Navbar";
-import '@rainbow-me/rainbowkit/styles.css';
 import ClientProviders from "../components/ClientProviders";
-
 
 function ProfileContent() {
   const { address, isConnected } = useAccount();
@@ -51,4 +47,4 @@ export default function Profile() {
       <ProfileContent />
     </ClientProviders>
   );
-} 
+}
