@@ -1,5 +1,5 @@
 export const freelancers = [
-    { name: "Alice Kim", username: "alice", role: "Frontend Developer", desc: "Passionate about building responsive UIs with React and Tailwind CSS.", projects: 24, stars: 4.8, perfection: 98, wallet: "GA5T5732YSIHO55AGQ4BTBL7KFK3PZNSOTULEEYEVXI7UQHFY7MI23YQ" },
+    { name: "Alice Kim", username: "alice", role: "Frontend Developer", desc: "Passionate about building responsive UIs with React and Tailwind CSS.", projects: 24, stars: 4.8, perfection: 98, wallet: "GA5T5732YSIHO55AGQ4BTBL7KFK3PZNSOTULEEYEVXI7UQHFY7MI23YQ " },
     { name: "Brian Lee", username: "brian", role: "Backend Engineer", desc: "Expert in scalable APIs and databases. Enjoys optimizing server performance.", projects: 31, stars: 4.6, perfection: 95, wallet: "0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db" },
     { name: "Carla Smith", username: "carla", role: "UI/UX Designer", desc: "Designs accessible, intuitive, and clean user experiences with good frontend design.", projects: 19, stars: 4.9, perfection: 99, wallet: "0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB" },
     { name: "David Chen", username: "david", role: "Full Stack Dev", desc: "Seamlessly bridges frontend and backend; eager to learn new tech.", projects: 27, stars: 4.7, perfection: 97, wallet: "0x617F2E2fD72FD9D5503197092AcC168C92156E9f" },
