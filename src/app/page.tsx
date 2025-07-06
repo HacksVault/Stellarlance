@@ -1,30 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { WagmiConfig, useAccount, http } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, sepolia } from "wagmi/chains";
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { RainbowKitProvider, ConnectButton } from "@rainbow-me/rainbowkit";
-import '@rainbow-me/rainbowkit/styles.css';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useRouter, usePathname } from "next/navigation";
 import styled from 'styled-components';
 import React from 'react';
-
-const config = getDefaultConfig({
-  appName: "CryptoTasks",
-  projectId: "64f747071044dfdaf878267ba0e66076",
-  chains: [mainnet, polygon, optimism, arbitrum, sepolia],
-  transports: {
-    [mainnet.id]: http(),
-    [polygon.id]: http(),
-    [optimism.id]: http(),
-    [arbitrum.id]: http(),
-    [sepolia.id]: http(),
-  },
-});
-
-const queryClient = new QueryClient();
 
 const StyledWrapper = styled.div`
   .button {
@@ -274,7 +255,6 @@ function GatedHome() {
                   account,
                   chain,
                   openAccountModal,
-                  openChainModal,
                   openConnectModal,
                   authenticationStatus,
                   mounted,
@@ -305,7 +285,6 @@ function GatedHome() {
                   account,
                   chain,
                   openAccountModal,
-                  openChainModal,
                   openConnectModal,
                   authenticationStatus,
                   mounted,
@@ -340,4 +319,3 @@ function GatedHome() {
 export default function HomePage() {
   return <GatedHome />;
 }
-
