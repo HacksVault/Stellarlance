@@ -6,12 +6,12 @@ from pydantic import BaseModel
 from typing import List
 import uvicorn
 import requests
-import os
 from fastapi.middleware.cors import CORSMiddleware
-
+from dotenv import load_dotenv
+import os
 # --- LLM Client Setup ---
 groq_client = AsyncOpenAI(
-    api_key=os.environ.get("GROQ_API_KEY"),  
+    api_key="Groq_Api_key",  
     base_url="https://api.groq.com/openai/v1"  
 )
 
@@ -144,10 +144,6 @@ async def send_proposal(client_wallet: str, freelancer_wallet: str, proposal_tex
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "service": "CryptoTasks Scout Agent"}
-
-@app.get("/")
-async def hello():
-    return {"message": "Hello from FastAPI on Vercel!"}
 
 # --- Main Entry Point ---
 if __name__ == "__main__":

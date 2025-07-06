@@ -195,9 +195,11 @@ function GatedHome() {
   const router = useRouter();
   const vantaRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const hasNavigated = useRef(false);
 
   useEffect(() => {
-    if (isConnected && pathname !== "/freelancers") {
+    if (isConnected && pathname !== "/freelancers" && !hasNavigated.current) {
+      hasNavigated.current = true;
       router.push("/freelancers");
     }
   }, [isConnected, pathname, router]);
@@ -336,15 +338,6 @@ function GatedHome() {
 }
 
 export default function HomePage() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiConfig config={config}>
-        <RainbowKitProvider>
-          <GatedHome />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </QueryClientProvider>
-  )
   return <GatedHome />;
 }
 

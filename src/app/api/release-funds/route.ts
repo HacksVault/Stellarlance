@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { spawn } from "child_process";
 import path from "path";
 
-const PYTHON_SCRIPT_PATH = path.join(process.cwd(), "cdp-sdk", "examples", "python", "evm", "send_umi_work_done.py");
-const PRIVATE_KEY = process.env.UMI_PRIVATE_KEY;
+const PYTHON_SCRIPT_PATH = path.join(process.cwd(), "cdp-sdk", "examples", "python", "evm", "send_stellar_work_done.py");
+const PRIVATE_KEY = process.env.STELLAR_PRIVATE_KEY;
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,9 +15,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Server misconfigured: missing private key." }, { status: 500 });
     }
 
-    // Call the Python script with arguments
+    // Call the Python script with arguments for Stellar
     // We'll pass sender, recipient, amount, and private key as arguments
-    // The script should be modified to accept these as command-line args
     const args = [from, to, amount.toString(), PRIVATE_KEY];
     
     return new Promise((resolve) => {
@@ -32,10 +31,11 @@ export async function POST(req: NextRequest) {
       });
       py.on("close", (code) => {
         if (code !== 0) {
-          resolve(NextResponse.json({ error: error || "Python script failed." }, { status: 500 }));
+          // Return both error and output for debugging
+          resolve(NextResponse.json({ error: error || output || "Python script failed.", output, stderr: error }, { status: 500 }));
         } else {
-          // Try to extract tx hash and block explorer URL from output
-          const hashMatch = output.match(/Hash: (0x[0-9a-fA-F]+)/);
+          // Try to extract tx hash and block explorer URL from output (Stellar hashes are hex, not 0x...)
+          const hashMatch = output.match(/Hash: ([a-fA-F0-9]{64})/);
           const urlMatch = output.match(/Block Explorer URL: (https?:\/\/\S+)/);
           resolve(NextResponse.json({
             output,

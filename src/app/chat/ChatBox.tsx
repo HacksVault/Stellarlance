@@ -62,10 +62,10 @@ function ProposalMessage({ message, isFromUser }: {
 }
 
 function autoLinkExplorer(text: string) {
-  // Regex for block explorer URLs
-  const urlRegex = /(https?:\/\/devnet\.explorer\.moved\.network\/transaction\/0x[0-9a-fA-F]+)/g;
-  // Regex for transaction hashes
-  const txHashRegex = /(0x[0-9a-fA-F]{64})/g;
+  // Regex for Stellar block explorer URLs
+  const urlRegex = /(https?:\/\/stellar\.expert\/explorer\/testnet\/tx\/[a-fA-F0-9]{64})/g;
+  // Regex for Stellar transaction hashes (64 hex chars)
+  const txHashRegex = /\b([a-fA-F0-9]{64})\b/g;
   // First, replace explorer URLs with links
   let parts = text.split(urlRegex);
   parts = parts.flatMap((part, i) => {
@@ -76,7 +76,7 @@ function autoLinkExplorer(text: string) {
     const subparts = part.split(txHashRegex);
     return subparts.map((sub, j) => {
       if (txHashRegex.test(sub)) {
-        const url = `https://devnet.explorer.moved.network/transaction/${sub}`;
+        const url = `https://stellar.expert/explorer/testnet/tx/${sub}`;
         return <a key={"txhash-"+i+"-"+j} href={url} target="_blank" rel="noopener noreferrer" className="underline text-cyan-300">{sub}</a>;
       }
       return sub;
@@ -265,6 +265,15 @@ const ChatBox = ({ role }: ChatBoxProps) => {
     return null;
   }
 
+  // Helper to detect and parse 'work done send <amount> xlm' messages
+  function parseWorkDoneSendXLM(msg: string): number | null {
+    const match = msg.trim().match(/^work done send ([0-9.]+) xlm$/i);
+    if (match) {
+      return parseFloat(match[1]);
+    }
+    return null;
+  }
+
   if (!isConnected) return null;
 
   // FREELANCER: Show a single chatbox with receiver address as 'to'
@@ -379,31 +388,30 @@ const ChatBox = ({ role }: ChatBoxProps) => {
                   // Only client triggers fund release
                   if (role === "client") {
                     const amount = parseWorkDoneRelease(msg);
-                    if (amount) {
-                      // Post the message first
+                    const xlmAmount = parseWorkDoneSendXLM(msg);
+                    if (amount || xlmAmount) {
                       await supabase.from('messages').insert([
                         { from: address, to: peer.address, text: msg }
                       ]);
-                      // Call the API to release funds
                       try {
                         const res = await fetch("/api/release-funds", {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ from: address, to: peer.address, amount })
+                          body: JSON.stringify({ from: address, to: peer.address, amount: amount || xlmAmount })
                         });
                         const data = await res.json();
                         if (data.hash) {
                           await supabase.from('messages').insert([
-                            { from: address, to: peer.address, text: `Funds sent! Tx Hash: ${data.hash}` }
+                            { from: address, to: peer.address, text: `Funds sent! Tx Hash: ${data.hash}\nExplorer: ${data.explorer || ''}` }
                           ]);
                         } else {
                           await supabase.from('messages').insert([
-                            { from: address, to: peer.address, text: `Fund release failed: ${data.error || 'Unknown error'}` }
+                            { from: address, to: peer.address, text: `Error sending funds: ${data.error || 'Unknown error'}` }
                           ]);
                         }
                       } catch (err: any) {
                         await supabase.from('messages').insert([
-                          { from: address, to: peer.address, text: `Fund release failed: ${err.message || err}` }
+                          { from: address, to: peer.address, text: `Error sending funds: ${err.message || err}` }
                         ]);
                       }
                       return;
