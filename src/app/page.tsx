@@ -213,7 +213,7 @@ function GatedHome() {
       <div ref={vantaRef} style={{ position: "fixed", inset: 0, zIndex: -1 }} />
       <div className="min-h-screen bg-transparent flex flex-col items-start justify-center px-4 ml-40">
         <h1 className="text-5xl md:text-6xl font-extrabold text-left mb-8 text-white">
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-red-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-800 to-red-600 bg-clip-text text-transparent">
             StellarLance
           </span>
         </h1>
