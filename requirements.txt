@@ -1,0 +1,8 @@
+fastapi
+pydantic
+openai
+requests
+uvicorn[standard]
+groq
+python-dotenv
+agents

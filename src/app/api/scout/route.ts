@@ -5,19 +5,29 @@ export async function POST(req: NextRequest) {
   try {
     const { prompt } = await req.json();
    
-    const res = await fetch("http://localhost:8000/scout", {
+    // Use Railway URL in production, localhost in development
+    const apiUrl = process.env.NODE_ENV === 'production' 
+      ? process.env.NEXT_PUBLIC_AGENT_API_URL || 'web-production-688e8.up.railway.app'
+      : 'http://localhost:8000';
+    
+    const res = await fetch(`${apiUrl}/scout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt, freelancers }),
     });
+    
     if (!res.ok) throw new Error("Agentic server error");
     const data = await res.json();
     return NextResponse.json({ agentMessage: data.agentMessage });
   } catch {
-    return NextResponse.json({ agentMessage: "Sorry, I couldn't process your request right now. Please try again later." }, { status: 200 });
+    return NextResponse.json({ 
+      agentMessage: "Sorry, I couldn't process your request right now. Please try again later." 
+    }, { status: 200 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ agentMessage: "Hi! I'm Scout, your AI assistant. Ask me to find the best freelancers for your needs!" });
-} 
+  return NextResponse.json({ 
+    agentMessage: "Hi! I'm Scout, your AI assistant. Ask me to find the best freelancers for your needs!" 
+  });
+}
