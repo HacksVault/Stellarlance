@@ -237,7 +237,7 @@ function GatedHome() {
       <div ref={vantaRef} style={{ position: "fixed", inset: 0, zIndex: -1 }} />
       <div className="min-h-screen bg-transparent flex flex-col items-start justify-center px-4 ml-40">
         <h1 className="text-5xl md:text-6xl font-extrabold text-left mb-8 text-white">
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-5=500 to-red-500 bg-clip-text text-transparent">
             StellarLance
           </span>
         </h1>
@@ -264,13 +264,31 @@ function GatedHome() {
                     (!authenticationStatus || authenticationStatus === "authenticated");
                   return (
                     <StyledWrapper>
-                      <StyledButton
+                      <button
+                        className="button"
+                        onMouseEnter={e => {
+                          const btn = e.currentTarget;
+                          const shine = document.createElement('div');
+                          shine.style.position = 'absolute';
+                          shine.style.top = '0';
+                          shine.style.left = '-75%';
+                          shine.style.width = '50%';
+                          shine.style.height = '100%';
+                          shine.style.background = 'linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.2) 100%)';
+                          shine.style.transform = 'skewX(-20deg)';
+                          shine.style.pointerEvents = 'none';
+                          shine.style.transition = 'left 0.6s cubic-bezier(.4,2,.6,1)';
+                          shine.className = 'button-shine';
+                          btn.appendChild(shine);
+                          setTimeout(() => { shine.style.left = '120%'; }, 10);
+                          setTimeout(() => { if (btn.contains(shine)) btn.removeChild(shine); }, 700);
+                        }}
                         onClick={connected ? openAccountModal : openConnectModal}
                         type="button"
                         disabled={!ready}
                       >
                         As Freelancer
-                      </StyledButton>
+                      </button>
                     </StyledWrapper>
                   );
                 }}
@@ -294,13 +312,31 @@ function GatedHome() {
                     (!authenticationStatus || authenticationStatus === "authenticated");
                   return (
                     <StyledWrapper>
-                      <StyledButton
+                      <button
+                        className="button"
+                        onMouseEnter={e => {
+                          const btn = e.currentTarget;
+                          const shine = document.createElement('div');
+                          shine.style.position = 'absolute';
+                          shine.style.top = '0';
+                          shine.style.left = '-75%';
+                          shine.style.width = '50%';
+                          shine.style.height = '100%';
+                          shine.style.background = 'linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.2) 100%)';
+                          shine.style.transform = 'skewX(-20deg)';
+                          shine.style.pointerEvents = 'none';
+                          shine.style.transition = 'left 0.6s cubic-bezier(.4,2,.6,1)';
+                          shine.className = 'button-shine';
+                          btn.appendChild(shine);
+                          setTimeout(() => { shine.style.left = '120%'; }, 10);
+                          setTimeout(() => { if (btn.contains(shine)) btn.removeChild(shine); }, 700);
+                        }}
                         onClick={connected ? openAccountModal : openConnectModal}
                         type="button"
                         disabled={!ready}
                       >
                         As Client
-                      </StyledButton>
+                      </button>
                     </StyledWrapper>
                   );
                 }}

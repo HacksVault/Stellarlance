@@ -377,7 +377,7 @@ export default function Agent() {
                   );
                 } else if (msg.role === "agent" || msg.role === "user") {
                   const isUser = msg.role === "user";
-                  return (
+                return (
                     <div key={i} className={`mb-4 flex ${isUser ? "justify-end" : "justify-start"}`}>
                       <div
                         className={`rounded-xl px-4 py-3 max-w-[80%] ${isUser ? "bg-cyan-600 text-white" : "bg-gray-400 text-gray-900"} break-all`}
@@ -385,8 +385,8 @@ export default function Agent() {
                       >
                         {msg.content}
                       </div>
-                    </div>
-                  );
+                  </div>
+                );
                 }
                 return null;
               })}
