@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useRouter, usePathname } from "next/navigation";
-import styled from 'styled-components';
+import styled, { ServerStyleSheet } from 'styled-components';
 import React from 'react';
 
 const StyledWrapper = styled.div`
@@ -142,34 +142,10 @@ const StyledButton = styled.button`
   }
 `;
 
-const ShadowButtonWrapper = styled.div`
-  button {
-    transition: all 0.5s;
-    font-size: 17px;
-    padding: 1ch 2ch;
-    background-color: white;
-    color: #000;
-    cursor: pointer;
-    border: none;
-    border-radius: 2px;
-    box-shadow:
-      2px 2px 0px hsl(0, 0%, 90%),
-      4px 4px 0px hsl(0, 0%, 80%),
-      6px 6px 0px hsl(0, 0%, 70%),
-      8px 8px 0px hsl(0, 0%, 60%),
-      10px 10px 0px hsl(0, 0%, 50%),
-      12px 12px 0px hsl(0, 0%, 40%),
-      14px 14px 0px hsl(0, 0%, 30%),
-      16px 16px 0px hsl(0, 0%, 20%),
-      18px 18px 0px hsl(0, 0%, 10%);
-  }
-
-  button:hover {
-    background-color: hsl(0, 0%, 50%);
-    color: #fff;
-    box-shadow: none;
-  }
-`;
+// Add this to ensure styles are rendered on server
+if (typeof window === 'undefined') {
+  React.useLayoutEffect = React.useEffect;
+}
 
 function GatedHome() {
   const { isConnected } = useAccount();
@@ -237,7 +213,7 @@ function GatedHome() {
       <div ref={vantaRef} style={{ position: "fixed", inset: 0, zIndex: -1 }} />
       <div className="min-h-screen bg-transparent flex flex-col items-start justify-center px-4 ml-40">
         <h1 className="text-5xl md:text-6xl font-extrabold text-left mb-8 text-white">
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-5=500 to-red-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-red-500 bg-clip-text text-transparent">
             StellarLance
           </span>
         </h1>
