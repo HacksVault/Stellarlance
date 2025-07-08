@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import os
 # --- LLM Client Setup ---
 groq_client = AsyncOpenAI(
-    api_key=os.environ.get("GROQ_API_KEY"),
+    api_key=os.environ.get("GROQ_API_KEY"),  # Ensure you set this in your environment
     base_url="https://api.groq.com/openai/v1"  
 )
 
@@ -19,7 +19,7 @@ groq_client = AsyncOpenAI(
 greeting_agent = Agent(
     name="Greeting Agent",
     instructions=(
-        "You are Scout, a friendly and helpful AI Agent for CryptoTasks. "
+        "You are Scout, a friendly and helpful AI Agent for Stellarlance. "
         "Greet the user if they haven't spoken yet. "
         "If the user says thank you, thanks, or similar, reply with a friendly message like 'You're welcome!' or offer further help. "
         "If the user greets you (hi, hello, etc.), greet them back and offer to help scout freelancers. "

@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { freelancers } from "./data";
 
@@ -11,249 +10,381 @@ interface CardProps {
   projects: number;
   stars: number;
   perfection: number;
+  username?: string;
+  wallet?: string;
 }
 
-const Card = ({ name, role, desc, projects, stars, perfection }: CardProps) => {
+const Card = ({ name, role, desc, projects, stars, perfection, username, wallet }: CardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div style={{
-      background: '#fff',
-      borderRadius: '16px',
-      boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
-      padding: '2rem 1.5rem',
-      margin: '0.5rem',
-      minWidth: 260,
-      maxWidth: 320,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      height: 320,
-    }}>
-      <div>
-        <div style={{ fontWeight: 700, fontSize: 22, color: '#222', marginBottom: 8 }}>{name}</div>
-        <div style={{ color: '#555', fontSize: 15, marginBottom: 16 }}>{desc}</div>
+    <>
+      <style jsx>{`
+        .freelancer-card {
+          position: relative;
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.1) 0%, 
+            rgba(255, 255, 255, 0.05) 100%);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px;
+          padding: 2rem;
+          margin: 0.5rem;
+          min-width: 320px;
+          max-width: 360px;
+          min-height: 400px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .freelancer-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.1), 
+            transparent);
+          transition: left 0.6s ease;
+        }
+
+        .freelancer-card:hover::before {
+          left: 100%;
+        }
+
+        .freelancer-card:hover {
+          transform: translateY(-8px) scale(1.02);
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.15) 0%, 
+            rgba(255, 255, 255, 0.08) 100%);
+          border-color: rgba(0, 245, 255, 0.4);
+          box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.4),
+            0 0 20px rgba(0, 245, 255, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .card-header {
+          position: relative;
+          z-index: 2;
+        }
+
+        .freelancer-name {
+          font-size: 1.5rem;
+          font-weight: 800;
+          background: linear-gradient(135deg, #00f5ff 0%, #4a90e2 25%, #8b45ff 75%, #ff0080 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 0.5rem;
+          letter-spacing: -0.02em;
+        }
+
+        .freelancer-username {
+          color: rgba(0, 245, 255, 0.8);
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .freelancer-role {
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          padding: 0.5rem 1rem;
+          background: rgba(0, 245, 255, 0.1);
+          border: 1px solid rgba(0, 245, 255, 0.3);
+          border-radius: 25px;
+          text-align: center;
+          box-shadow: 0 4px 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .freelancer-desc {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.95rem;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+          text-align: center;
+        }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-top: auto;
+        }
+
+        .stat-item {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 1rem;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.2);
+          transform: scale(1.05);
+        }
+
+        .stat-label {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.8rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+          color: #ffffff;
+          font-size: 1.1rem;
+          font-weight: 700;
+        }
+
+        .star-rating {
+          color: #ffd700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+
+        .additional-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
+          margin-top: 1.5rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          padding: 0.75rem;
+          transition: all 0.3s ease;
+        }
+
+        .detail-item:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(0, 245, 255, 0.3);
+          transform: scale(1.02);
+        }
+
+        .detail-label {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.75rem;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .detail-value {
+          color: #ffffff;
+          font-size: 0.85rem;
+          font-weight: 700;
+        }
+
+        .floating-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: rgba(255, 20, 147, 0.9);
+          color: #ffffff;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          z-index: 3;
+          box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .perfection-high {
+          background: rgba(0, 255, 100, 0.9);
+          box-shadow: 0 4px 15px rgba(0, 255, 100, 0.3);
+        }
+
+        .perfection-medium {
+          background: rgba(255, 200, 0, 0.9);
+          box-shadow: 0 4px 15px rgba(255, 200, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .freelancer-card {
+            min-width: 280px;
+            max-width: 320px;
+            margin: 0.25rem;
+            padding: 1.5rem;
+          }
+          
+          .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+          
+          .additional-details {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+          }
+        }
+      `}</style>
+      
+      <div 
+        className="freelancer-card"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Floating Badge */}
+        <div className={`floating-badge ${
+          perfection >= 98 ? 'perfection-high' : 
+          perfection >= 95 ? 'perfection-medium' : ''
+        }`}>
+          {perfection}% Perfect
+        </div>
+
+        {/* Header */}
+        <div className="card-header">
+          <div className="freelancer-name">{name}</div>
+          {username && (
+            <div className="freelancer-username">
+              <span>@{username}</span>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>🔗</span>
+            </div>
+          )}
+          <div className="freelancer-role">{role}</div>
+          <div className="freelancer-desc">{desc}</div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="stats-grid">
+          <div className="stat-item">
+            <div className="stat-label">Projects</div>
+            <div className="stat-value">{projects}</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-label">Rating</div>
+            <div className="stat-value star-rating">
+              {stars} ⭐
+            </div>
+          </div>
+        </div>
+
+        {        /* Additional Details */}
+        <div className="additional-details">
+          <div className="detail-item">
+            <div className="detail-label">💰 Rate</div>
+            <div className="detail-value">{Math.floor(Math.random() * 80) + 20} XLM</div>
+          </div>
+          <div className="detail-item">
+            <div className="detail-label">⚡ Response</div>
+            <div className="detail-value">{Math.floor(Math.random() * 4) + 1}h avg</div>
+          </div>
+          <div className="detail-item">
+            <div className="detail-label">🌍 Location</div>
+            <div className="detail-value">{['USA', 'Canada', 'UK', 'Germany', 'Australia', 'Singapore'][Math.floor(Math.random() * 6)]}</div>
+          </div>
+          <div className="detail-item">
+            <div className="detail-label">🔧 Skills</div>
+            <div className="detail-value">{
+              role.includes('Developer') ? 'React, Node.js, TypeScript' :
+              role.includes('Designer') ? 'Figma, Adobe XD, Sketch' :
+              role.includes('Engineer') ? 'Python, AWS, Docker' :
+              'React, API, Database'
+            }</div>
+          </div>
+        </div>
       </div>
-      <div style={{ fontSize: 14, color: '#333', marginTop: 12 }}>
-        <div><strong>Role:</strong> {role}</div>
-        <div><strong>Projects:</strong> {projects}</div>
-        <div><strong>Stars:</strong> {stars}</div>
-        <div><strong>Perfection:</strong> {perfection}%</div>
-      </div>
-    </div>
+    </>
   );
 };
-
-const StyledWrapper = styled.div`
-  .parent {
-    width: 300px;
-    height: 320px;
-    perspective: 1200px;
-  }
-
-  .card {
-    height: 100%;
-    border-radius: 40px;
-    background: linear-gradient(
-      135deg,
-      rgb(106, 90, 205) 0%,
-      rgb(147, 112, 219) 100%
-    );
-    transition: all 0.6s ease-in-out;
-    transform-style: preserve-3d;
-    box-shadow:
-      rgba(30, 30, 60, 0) 40px 50px 25px -40px,
-      rgba(30, 30, 60, 0.2) 0px 25px 25px -5px;
-  }
-
-  .glass {
-    transform-style: preserve-3d;
-    position: absolute;
-    inset: 10px;
-    border-radius: 45px;
-    border-top-left-radius: 100%;
-    background: linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.7) 100%
-    );
-    transform: translate3d(0px, 0px, 30px);
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.6s ease-in-out;
-  }
-
-  .content {
-    padding: 32px 25px 0px 25px;
-    transform: translate3d(0, 0, 31px);
-  }
-
-  .content .title {
-    display: block;
-    color: #3c2f80;
-    font-weight: 900;
-    font-size: 22px;
-    text-align: right;
-    padding-right: 0px;
-    margin-bottom: 10px;
-  }
-
-  .content .text {
-    display: block;
-    color: rgba(60, 47, 128, 0.8);
-    font-size: 14px;
-    margin-top: 50px;
-    margin-bottom: 10px;
-    text-align: right;
-    padding-right: 0px;
-    padding-left: 60px;
-  }
-
-  .bottom {
-    padding: 12px 15px;
-    transform-style: preserve-3d;
-    position: absolute;
-    bottom: 25px;
-    left: 25px;
-    right: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transform: translate3d(0, 0, 31px);
-  }
-
-  .bottom .view-more {
-    display: flex;
-    align-items: center;
-    width: 40%;
-    justify-content: flex-end;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .bottom .view-more:hover {
-    transform: translate3d(0, 0, 15px);
-  }
-
-  .bottom .view-more .view-more-button {
-    background: none;
-    border: none;
-    color: #6a5acd;
-    font-weight: bold;
-    font-size: 13px;
-  }
-
-  .bottom .view-more .svg {
-    fill: none;
-    stroke: #6a5acd;
-    stroke-width: 2.5px;
-    max-height: 14px;
-  }
-
-  .logo {
-    position: absolute;
-    left: 0;
-    top: 0;
-    transform-style: preserve-3d;
-  }
-
-  .logo .circle {
-    display: block;
-    position: absolute;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    top: 0;
-    left: 0;
-    box-shadow: rgba(100, 100, 111, 0.2) 10px 10px 20px 0px;
-    background: rgba(147, 112, 219, 0.3);
-    transition: all 0.6s ease-in-out;
-  }
-
-  .logo .circle1 {
-    width: 160px;
-    transform: translate3d(0, 0, 25px);
-    top: 10px;
-    left: 10px;
-  }
-
-  .logo .circle2 {
-    width: 130px;
-    transform: translate3d(0, 0, 45px);
-    top: 12px;
-    left: 12px;
-    transition-delay: 0.3s;
-  }
-
-  .logo .circle3 {
-    width: 100px;
-    transform: translate3d(0, 0, 65px);
-    top: 15px;
-    left: 15px;
-    transition-delay: 0.6s;
-  }
-
-  .logo .circle4 {
-    width: 70px;
-    transform: translate3d(0, 0, 85px);
-    top: 20px;
-    left: 20px;
-    transition-delay: 0.9s;
-  }
-
-  .logo .circle5 {
-    width: 40px;
-    transform: translate3d(0, 0, 105px);
-    top: 25px;
-    left: 25px;
-    display: grid;
-    place-content: center;
-    transition-delay: 1.2s;
-  }
-
-  .logo .circle5 .svg {
-    width: 18px;
-    fill: #ffffff;
-  }
-
-  .parent:hover .card {
-    transform: rotate3d(1, -1, 0, 25deg);
-    box-shadow:
-      rgba(30, 30, 60, 0.3) 30px 50px 25px -40px,
-      rgba(30, 30, 60, 0.15) 0px 25px 30px 0px;
-  }
-
-  .parent:hover .card .logo .circle2 {
-    transform: translate3d(0, 0, 65px);
-  }
-
-  .parent:hover .card .logo .circle3 {
-    transform: translate3d(0, 0, 85px);
-  }
-
-  .parent:hover .card .logo .circle4 {
-    transform: translate3d(0, 0, 105px);
-  }
-
-  .parent:hover .card .logo .circle5 {
-    transform: translate3d(0, 0, 125px);
-  }
-
-  .card-meta {
-    margin: 8px 18px 0 18px;
-    padding: 10px 18px 6px 0;
-    text-align: right;
-    color: #3c2f80;
-    font-weight: 600;
-    font-size: 15px;
-    background: rgba(255,255,255,0.18);
-    border-radius: 14px;
-    box-shadow: 0 2px 12px 0 rgba(60,47,128,0.08);
-    backdrop-filter: blur(2px);
-  }
-`
 
 export default function Freelancers() {
   return (
     <>
+      <style jsx global>{`
+        body {
+          background: #000000;
+          min-height: 100vh;
+        }
+        
+        .freelancers-container {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #000000 0%, #111111 100%);
+          padding: 2rem;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          justify-content: center;
+          align-items: flex-start;
+        }
+        
+        .page-title {
+          width: 100%;
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+        
+        .title-text {
+          font-size: 3rem;
+          font-weight: 800;
+          background: linear-gradient(135deg, #00f5ff 0%, #4a90e2 25%, #8b45ff 75%, #ff0080 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 1rem;
+          letter-spacing: -0.02em;
+        }
+        
+        .subtitle-text {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 1.2rem;
+          font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+          .freelancers-container {
+            padding: 1rem;
+            gap: 1rem;
+          }
+          
+          .title-text {
+            font-size: 2rem;
+          }
+          
+          .subtitle-text {
+            font-size: 1rem;
+          }
+        }
+      `}</style>
+      
       <Navbar />
-      <div className="min-h-screen bg-gray-100 dark:bg-black flex flex-wrap gap-8 justify-center items-start p-8">
+      <div className="freelancers-container">
+        <div className="page-title">
+          <h1 className="title-text"></h1>
+          <p className="subtitle-text">Discover Freelancers</p>
+        </div>
+        
         {freelancers.map((f, i) => (
           <Card key={i} {...f} />
         ))}
