@@ -1,10 +1,11 @@
 # Stellerlance
 
-This project is a freelancing platform with agentic automation, now powered by the Stellar blockchain for payments and account creation.
+This project is a fully autonomous decentralized freelancers hiring platform with agentic automation, now powered by the Stellar blockchain for payments and account creation.
 
 ## Environment Variables
 
 - `STELLAR_PRIVATE_KEY`: The secret key for the Stellar account used to send payments and create accounts.
+
 
 ## Blockchain Integration
 
@@ -14,10 +15,12 @@ This project is a freelancing platform with agentic automation, now powered by t
 ## CryptoTasks
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=yours
-NEXT_PUBLIC_SUPABASE_ANON_KEY=yours
+
+Login to Groq and create your own free Api key to run the agent llm
 GROQ_API_KEY=yours
 ```
+
+⚠️In order to use agent in local environment you need your own api key
 
 ### installing
 
